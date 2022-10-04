@@ -2,31 +2,36 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use App\Http\Requests\Auth\RegisterRequest;
+use App\Models\User;
+use App\Http\Controllers\Controller;
 
 class RegisterController extends Controller
 {
-    public function index(Request $request)
+     /**
+     * Registers a user
+     *
+     * @param RegisterRequest $request contains the verfied body
+     *
+     * @return ResponseFactory contains user's data a message
+     */
+    public function index(RegisterRequest $request)
     {
-        $body = $request->validated();
+        // Get validated body attributes
+        $attributes = $request->validated();
 
-        $body["password"] = bcrypt($body["password"]);
+        $attributes["password"] = bcrypt($attributes["password"]);
+        // Set user's default attributes
+        $attributes["slug"] = slugify($attributes["username"]);
+        $attributes["_id"] = getUuid();
 
-        $default = [
-            "slug" => Str::slug($body["name"]),
-            "uuid" => Str::orderedUuid()->getHex(),
-        ];
-
-        // Create user
-        $user = User::create(array_merge($body, $default));
+        $user = User::create($attributes);
 
         // Return success response
-        return [
+        return okResponse([
             "data" => $user,
-            "user register",
-        ];
+            "keyMessage" => "registered"
+        ], 201);
     }
 }
