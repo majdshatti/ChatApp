@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -46,5 +48,30 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        $exception = $this->prepareException($exception);
+
+        /** Handle NotFoundHttpException */
+        if ($exception instanceof NotFoundHttpException) {
+            return response([
+                "success" => false,
+                "message" => $exception->getMessage() === ""
+                        ? "resource not found"
+                        : $exception->getMessage(),
+            ], $exception->getStatusCode());
+        }
+
+        /** Handle requesting on private routes with no vaild token */
+        if($exception instanceof RouteNotFoundException) {
+            return response([
+                "success" => false,
+                "message" => getResMessage("authenticate"),
+            ], 401);
+        }
+
+        return parent::render($request, $exception);
     }
 }
