@@ -9,7 +9,8 @@ use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $body = $request->validated();
 
         $body["password"] = bcrypt($body["password"]);
@@ -23,10 +24,9 @@ class RegisterController extends Controller
         $user = User::create(array_merge($body, $default));
 
         // Return success response
-        return (
-            [
-                "data" => $user,
-                "user register"
-            ]);
+        return [
+            "data" => $user,
+            "user register",
+        ];
     }
 }
