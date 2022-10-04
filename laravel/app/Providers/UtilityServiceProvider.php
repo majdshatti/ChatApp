@@ -19,5 +19,4 @@ class UtilityServiceProvider extends ServiceProvider
             require_once $utilityFile;
         }
     }
-
 }
