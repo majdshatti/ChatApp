@@ -4,6 +4,39 @@
 
 A simple chat-app that provides real-time chatting through node.js/socket.io server and database operations handling through laravel framework.
 
+## Usage Guide
+
+First you need to clone the repository
+
+```
+git clone https://github.com/majdshatti/ChatApp.git
+```
+
+Start express server
+
+```
+cd node
+npm run dev
+```
+
+Start laravel server
+
+```
+cd laravel
+php artisan serve
+```
+
+And finally migrate tables to the DB, type in the same laravel directory
+
+```
+php artisan migrate
+```
+
+In order to use socket.io first you need to make a request to:
+`http://localhost:3000?receiverId=examleid2234da3r32`
+Then to send a message to a user make sure to emit an event on `sendMessage` listener with the payload of a string.
+and to receive incoming message from a user listen to event `msgToClient` which returns a payload of a string.
+
 ## Laravel API Endpoints
 
 - URL: http://localhost:8000
@@ -45,8 +78,6 @@ Note that you need to send a header `authorization` and has the value of a token
 | WebSocket | Endpoints                           | Action                                      |
 | --------- | ----------------------------------- | ------------------------------------------- |
 | Socket.IO | http://localhost:3000?receiverId=id | Here where the connection to socket is made |
-
-To send a message make sure to emit an event on `sendMessage` listener with the payload of a string
 
 ## Technologies Used
 
