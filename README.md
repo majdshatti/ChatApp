@@ -28,7 +28,8 @@ composer install
 php artisan serve
 ```
 
-And finally migrate tables to the DB, type in the same laravel directory
+And finally migrate tables to the DB, type in the same laravel directory, but first
+make sure to change db name in .env
 
 ```
 php artisan migrate
