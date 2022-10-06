@@ -18,7 +18,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = ["_id", "username", "email", "password"];
+    protected $fillable = ["_id", "username", "phone_number", "email", "password"];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -28,6 +28,13 @@ class User extends Authenticatable
     protected $hidden = ["password", "remember_token", "id"];
 
     /**
+     * The relations returns with user resource.
+     *
+     * @var array<int, string>
+     */
+    protected $with = ["contacts"];
+
+    /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
@@ -35,4 +42,14 @@ class User extends Authenticatable
     protected $casts = [
         "email_verified_at" => "datetime",
     ];
+
+    /** Message Relation */
+    public function messages(){
+        return $this->hasMany(Message::class, "sender_id");
+    }
+
+    /** Contact Relation */
+    public function contacts(){
+        return $this->hasMany(Contact::class, "user_id");
+    }
 }
