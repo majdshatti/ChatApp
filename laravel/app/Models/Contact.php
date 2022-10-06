@@ -15,7 +15,7 @@ class Contact extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ["_id", "owner_id", "user_id"];
+    protected $fillable = ["_id", "name", "phone_number", "user_id"];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -23,4 +23,9 @@ class Contact extends Model
      * @var array<int, string>
      */
     protected $hidden = ["id"];
+
+    /** User Relation */
+    public function user(){
+        return $this->belongsTo(User::class, "owner_id");
+    }
 }
