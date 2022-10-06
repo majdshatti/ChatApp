@@ -16,6 +16,7 @@ Start express server
 
 ```
 cd node
+npm install
 npm run dev
 ```
 
@@ -23,6 +24,7 @@ Start laravel server
 
 ```
 cd laravel
+composer install
 php artisan serve
 ```
 
