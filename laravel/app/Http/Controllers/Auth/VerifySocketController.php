@@ -11,7 +11,14 @@ use Illuminate\Support\Facades\Redis;
 
 class VerifySocketController extends Controller
 {
-    //
+    /**
+     * Verify connected user to the nodejs socketing server
+     * and verify the user that is going to receive the message if does exist
+     *
+     * @param string $userSentToId the user supposed to be receiving message
+     *
+     * @return Response
+     */
     public function index(string $userSentToId) {
         $userSentTo = User::where("_id", $userSentToId)->first();
 
