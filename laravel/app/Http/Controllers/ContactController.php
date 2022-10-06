@@ -33,28 +33,25 @@ class ContactController extends Controller
         $attributes = $request->validated();
 
         // Fetch contact's user
-        $contactOwner = User::where("_id", $attributes["contact_owner_id"])->first();
+        $contactOwner = User::where("phone_number", $attributes["phone_number"])->first();
 
         if(!$contactOwner) {
             return badResponse(getResMessage("notExist", [
-                "value" => "id"
+                "value" => $attributes["phone_number"]
             ]));
         }
-
-        $contactOwnerId = $contactOwner->id;
 
         // Get logged in user id
         $userId = Auth()->user()->id;
 
-        // Make sure that user not adding his contact
-        if($userId === $contactOwnerId){
+        if($contactOwner->id == $userId){
             return badResponse(getResMessage("selfAddContact"));
         }
 
         /** Make sure that contact is not already added */
         $isContactExist = Contact::where([
-            ["owner_id", '=', $contactOwnerId],
             ["user_id", '=', $userId],
+            ["phone_number", '=', $attributes["phone_number"]],
         ])->first();
 
         if($isContactExist) {
@@ -64,18 +61,19 @@ class ContactController extends Controller
             ]));
         }
 
-        Contact::create([
+        $contact = Contact::create([
             "_id" => getUuid(),
-            "owner_id" => $contactOwnerId,
-            "user_id" => $userId
+            "user_id" => $userId,
+            "name" => $contactOwner->username,
+            "phone_number" => $attributes["phone_number"],
         ]);
 
         return okResponse([
-            "data" => $contactOwner,
+            "data" => $contact,
             "message" => getResMessage("addContact",
                 [ "value" => $contactOwner->username ]
             )
-        ]);
+        ], 201);
     }
 
     /**
@@ -121,6 +119,6 @@ class ContactController extends Controller
             "message" => getResMessage("deleted", [
                 "path" => "contact"
             ])
-        ]);
+        ], 202);
     }
 }
