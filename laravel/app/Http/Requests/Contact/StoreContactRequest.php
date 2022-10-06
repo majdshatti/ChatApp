@@ -23,6 +23,6 @@ class StoreContactRequest extends FormRequest
      */
     public function rules()
     {
-        return ["contact_owner_id" => "required"];
+        return ["phone_number" => "required"];
     }
 }
