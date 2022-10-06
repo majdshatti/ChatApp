@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->id();
             $table->uuid("_id");
             $table->string("username");
+            $table->string("phone_number");
             $table->string("email")->unique();
             $table->string("password");
             $table->rememberToken();
